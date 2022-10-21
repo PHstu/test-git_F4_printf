@@ -60,7 +60,7 @@ void SystemClock_Config(void);
 // 重定向print start
 int __io_putchar(int ch)
 {
-	while ((USART1->SR & 0X40) == 0); //循环发送,直到发送完毕//具体哪个串口可以更改USART1为其它串口
+	while ((USART1->SR & 0X40) == 0);  //循环发送，直到发完，USART1可改为其他串口号
 	USART1->DR = (uint8_t) ch;
 	return ch;
 }
@@ -120,6 +120,13 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+	  printf("Yes !\r\n");
+	  HAL_Delay(8);
+	  printf("OK\r\n");
+	  HAL_Delay(8);
+	  HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
+
   }
   /* USER CODE END 3 */
 }
@@ -182,6 +189,7 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
+
   while (1)
   {
   }
