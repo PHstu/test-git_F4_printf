@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -54,6 +55,29 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+#include "stdio.h"
+
+// 重定向print start
+int __io_putchar(int ch)
+{
+	while ((USART1->SR & 0X40) == 0); //循环发送,直到发送完毕//具体哪个串口可以更改USART1为其它串口
+	USART1->DR = (uint8_t) ch;
+	return ch;
+}
+
+//_write函数在syscalls.c中， 使用__weak定义， 所以可以直接在其他文件中定义_write函數
+__attribute__((weak)) int _write(int file, char *ptr, int len)
+{
+	int DataIdx;
+	for (DataIdx = 0; DataIdx < len; DataIdx++)
+	{
+		__io_putchar(*ptr++);
+	}
+	return len;
+}
+// 重定向print end
+
+
 /* USER CODE END 0 */
 
 /**
@@ -84,6 +108,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
