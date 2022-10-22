@@ -57,7 +57,7 @@ void SystemClock_Config(void);
 
 #include "stdio.h"
 
-// 重定向print start
+// 重定向print BEGIN
 int __io_putchar(int ch)
 {
 	while ((USART1->SR & 0X40) == 0);  //循环发送，直到发完，USART1可改为其他串口号
@@ -75,7 +75,15 @@ __attribute__((weak)) int _write(int file, char *ptr, int len)
 	}
 	return len;
 }
-// 重定向print end
+// 重定向print END
+// 重定向scanf BEGIN
+int __io_getchar()
+{
+	int ch;
+	HAL_UART_Receive(&huart1, (uint8_t *)&ch, 1, 0xFFFF);	//接收一个字节
+	return ch;
+}
+// 重定向scanf END
 
 
 /* USER CODE END 0 */
@@ -111,6 +119,9 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
+  setvbuf(stdin, NULL, _IONBF, 0);
+  setvbuf(stdout, NULL, _IONBF, 0);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -123,18 +134,34 @@ int main(void)
 
 //	  float adc_reg = 0.0;//模拟ADC数据
 //	  float adc_result;//模拟ADC数据的计算结果
-	  double adc_reg = 0.0;//模拟ADC数据//双精度浮点测试
-	  double adc_result;//模拟ADC数据的计算结果//双精度浮点测试
+////	  double adc_reg = 0.0;//模拟ADC数据//双精度浮点测试
+////	  double adc_result;//模拟ADC数据的计算结果//双精度浮点测试
+//
+//	  for(adc_reg = 0.1;adc_reg<400;adc_reg++)
+//	  {
+//		  adc_result = adc_reg*33/4096;//ADC计算
+//
+//		  printf("ADC = %f\r\n",adc_result);//浮点输出
+////		  printf("ADC = %lf\r\n",adc_result);//浮点输出//双精度浮点测试//%lf可以输出double类型的数据
+//		  HAL_Delay(12);
+//		  printf("OK\r\n");//正常文字输出
+		  HAL_Delay(12);
+		  HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);//翻转工作指示灯
+//	  }
 
-	  for(adc_reg = 0.1;adc_reg<400;adc_reg++)
+	  //22·10·22预期实现：
+	  //scanf接收翻转接收LED √
+	  //添加更多注释 √
+	  //dma@scanf高速接收
+	  //测试git非代码文件
+	  //浮点接收
+	  char receive[20] = {0};//注意接收字符串要使用char数组，注意数组初始化方式，使用初始化为0来清空字符串
+	  printf("\r\nPlease Input:");
+	  scanf("%s",&receive[0]);//注意取地址符和数组配合//重定义的scanf()在读到 空格 时才会认为字符串结束
+	  if(receive[1])//如果判断receive，会有receive常为真的worring
 	  {
-		  adc_result = adc_reg*33/4096;//ADC计算
-
-		  printf("ADC = %lf\r\n",adc_result);//浮点输出//双精度浮点测试//%lf可以输出double类型的数据
-		  HAL_Delay(12);
-		  printf("OK\r\n");//正常文字输出
-		  HAL_Delay(12);
-		  HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);//工作指示灯
+		  printf("%s\r\n",receive);//printf最好加上换行符，不容易卡死
+		  HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);//翻转接收指示灯
 	  }
 
   }
