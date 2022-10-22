@@ -152,15 +152,26 @@ int main(void)
 	  //22·10·22预期实现：
 	  //scanf接收翻转接收LED √
 	  //添加更多注释 √
+	  //浮点接收 √
+	  //git新增非代码文件 √
 	  //dma@scanf高速接收
-	  //测试git非代码文件
-	  //浮点接收
-	  char receive[20] = {0};//注意接收字符串要使用char数组，注意数组初始化方式，使用初始化为0来清空字符串
-	  printf("\r\nPlease Input:");
-	  scanf("%s",&receive[0]);//注意取地址符和数组配合//重定义的scanf()在读到 空格 时才会认为字符串结束
-	  if(receive[1])//如果判断receive，会有receive常为真的worring
+	  //git更改非代码文件
+
+//	  char receive[20] = {0};//注意接收字符串要使用char数组，注意数组初始化方式，使用初始化为0来清空字符串
+//	  printf("\r\nPlease Input:");
+//	  scanf("%s",&receive[0]);//注意取地址符和数组配合//重定义的scanf()在读到 空格 时才会认为字符串结束
+//	  if(receive[1])//如果判断receive，会有receive常为真的worring
+//	  {
+//		  printf("%s\r\n",receive);//printf最好加上换行符，不容易卡死
+//		  HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);//翻转接收指示灯
+//	  }
+
+	  float receive = 0.0;//接收浮点数
+	  printf("\r\nPlease Input float type:");
+	  scanf("%f",&receive);//注意取地址符和数组配合//重定义的scanf()在读到 空格 时才会认为字符串结束
+	  if(receive)
 	  {
-		  printf("%s\r\n",receive);//printf最好加上换行符，不容易卡死
+		  printf("%3.4f\r\n",receive);//printf要加上换行符，不容易卡死
 		  HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);//翻转接收指示灯
 	  }
 
