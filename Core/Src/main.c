@@ -121,11 +121,18 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	  printf("Yes !\r\n");
-	  HAL_Delay(8);
-	  printf("OK\r\n");
-	  HAL_Delay(8);
-	  HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
+	  float adc_result;
+	  float adc_reg = 0.0;
+	  for(adc_reg = 0.1;adc_reg<400;adc_reg++)
+	  {
+		  adc_result = adc_reg*33/4096;
+
+		  printf("ADC = %f\r\n",adc_result);
+		  HAL_Delay(8);
+		  printf("OK\r\n");
+		  HAL_Delay(8);
+		  HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
+	  }
 
   }
   /* USER CODE END 3 */
