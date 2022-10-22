@@ -121,17 +121,20 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	  float adc_result;
-	  float adc_reg = 0.0;
+//	  float adc_reg = 0.0;//模拟ADC数据
+//	  float adc_result;//模拟ADC数据的计算结果
+	  double adc_reg = 0.0;//模拟ADC数据//双精度浮点测试
+	  double adc_result;//模拟ADC数据的计算结果//双精度浮点测试
+
 	  for(adc_reg = 0.1;adc_reg<400;adc_reg++)
 	  {
-		  adc_result = adc_reg*33/4096;
+		  adc_result = adc_reg*33/4096;//ADC计算
 
-		  printf("ADC = %f\r\n",adc_result);
-		  HAL_Delay(8);
-		  printf("OK\r\n");
-		  HAL_Delay(8);
-		  HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
+		  printf("ADC = %lf\r\n",adc_result);//浮点输出//双精度浮点测试//%lf可以输出double类型的数据
+		  HAL_Delay(12);
+		  printf("OK\r\n");//正常文字输出
+		  HAL_Delay(12);
+		  HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);//工作指示灯
 	  }
 
   }
